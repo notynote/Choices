@@ -31,14 +31,17 @@ public class MainMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         titleText.setText("Choices");
         authorText.setText("by NotyNote");
+
     }
 
     public void TitleMouseEnter() {
         pane.setStyle("-fx-background-color: red");
+        Main.player.play();
     }
 
     public void TitleMouseLeave() {
         pane.setStyle("-fx-background-color: white");
+        Main.player.pause();
     }
 
     public void RainbowDash() {
