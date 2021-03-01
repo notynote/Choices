@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="choices.MainMenuController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="pane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="choices.MainMenuController">
+   <children>
+      <Text fx:id="titleText" layoutY="97.0" onMouseEntered="#TitleMouseEnter" onMouseExited="#TitleMouseLeave" onMouseMoved="#RainbowDash" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="1280.0">
+         <font>
+            <Font size="60.0" />
+         </font>
+      </Text>
+      <Button fx:id="startButton" layoutX="516.0" layoutY="279.0" mnemonicParsing="false" prefHeight="88.0" prefWidth="249.0" text="Start Game" />
+      <Text fx:id="authorText" layoutX="1.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author" textAlignment="CENTER" wrappingWidth="1280.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Button fx:id="exitButton" layoutX="516.0" layoutY="407.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="88.0" prefWidth="249.0" text="EXIT" />
+   </children>
 </AnchorPane>
