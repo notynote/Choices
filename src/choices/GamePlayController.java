@@ -6,8 +6,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -35,7 +39,45 @@ public class GamePlayController implements Initializable {
     @FXML
     CheckBox muteCheck;
 
+    @FXML
+    Button choice1;
 
+    @FXML
+    Button choice2;
+
+    @FXML
+    Button choice3;
+
+    @FXML
+    ImageView image;
+
+    @FXML
+    Text questionTitle;
+
+    @FXML
+    TextArea questionDesc;
+
+    Question[] questions = {
+            new Question("Welcome to the Game", 0, "Welcome you guys to the game bla bla bla bla", "/resources/480x270.png",
+                    "First Question", 1, "Second Question", 2, "Third Question", 3),
+
+            new Question("First Question", 1, "First Question", "/resources/480x270.png",
+                    "Second Question", 2, "Third Question", 3, "Four Question", 4),
+
+            new Question("Second Question", 2, "Second Question", "/resources/480x270.png",
+                    "Third Question", 3, "Four Question", 4, "Final Question", 5),
+
+            new Question("Third Question", 3, "Third Question", "/resources/480x270.png",
+                    "Four Question", 4, "Final Question", 5, "Final Question", 5),
+
+            new Question("Four Question", 4, "Four Question", "/resources/480x270.png",
+                    "Final Question", 5, "Final Question", 5, "Final Question", 5),
+
+            new Question("Final Question", 5, "Final Question", "/resources/480x270.png",
+                    "The End", 0, "The End", 0, "The End", 0)
+    };
+
+    Question currentQuestion;
 
     public void MusicToggle() {
         if (muteCheck.isSelected()) {
@@ -56,6 +98,11 @@ public class GamePlayController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        currentQuestion = questions[0];
+
+        SetDisplayQuestion(currentQuestion);
+
+
         Main.songPlayer.stop();
         try {
             Main.mainSong = new Media(getClass().getResource("/resources/GameScene.wav").toURI().toString());
@@ -69,7 +116,6 @@ public class GamePlayController implements Initializable {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
 
         muteCheck.setSelected(!Main.isMusicPlaying);
 
@@ -102,5 +148,31 @@ public class GamePlayController implements Initializable {
 
         pane.setDisable(false);
 
+    }
+
+    public void ChangeQuestion(Button button) {
+        int nextQuestionId = Integer.parseInt(button.getId());
+        currentQuestion = questions[nextQuestionId];
+
+        SetDisplayQuestion(currentQuestion);
+
+    }
+
+    public void SetDisplayQuestion(Question question) {
+        questionTitle.setText(question.eventTitle);
+        questionDesc.setText(question.eventDesc);
+        image.setImage(new Image(question.imagePath));
+
+        choice1.setText(question.answerOneText);
+        choice1.setId(String.valueOf(question.answerOneDest));
+        choice1.setOnAction(actionEvent -> ChangeQuestion(choice1));
+
+        choice2.setText(question.answerTwoText);
+        choice2.setId(String.valueOf(question.answerTwoDest));
+        choice2.setOnAction(actionEvent -> ChangeQuestion(choice2));
+
+        choice3.setText(question.answerThreeText);
+        choice3.setId(String.valueOf(question.answerThreeDest));
+        choice3.setOnAction(actionEvent -> ChangeQuestion(choice3));
     }
 }
