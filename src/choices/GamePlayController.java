@@ -59,22 +59,28 @@ public class GamePlayController implements Initializable {
 
     Question[] questions = {
             new Question("Welcome to the Game", 0, "Welcome you guys to the game bla bla bla bla", "/resources/480x270.png",
-                    "First Question", 1, "Second Question", 2, "Third Question", 3),
+                    "First Question", 1, "Second Question", 2, "Third Question", 3,
+                    "/resources/GameScene.wav"),
 
             new Question("First Question", 1, "First Question", "/resources/480x270.png",
-                    "Second Question", 2, "Third Question", 3, "Four Question", 4),
+                    "Second Question", 2, "Third Question", 3, "Four Question", 4,
+                    "/resources/GameScene.wav"),
 
             new Question("Second Question", 2, "Second Question", "/resources/480x270.png",
-                    "Third Question", 3, "Four Question", 4, "Final Question", 5),
+                    "Third Question", 3, "Four Question", 4, "Final Question", 5,
+                    "/resources/GameScene.wav"),
 
             new Question("Third Question", 3, "Third Question", "/resources/480x270.png",
-                    "Four Question", 4, "Final Question", 5, "Final Question", 5),
+                    "Four Question", 4, "Final Question", 5, "Final Question", 5,
+                    "/resources/GameScene.wav"),
 
             new Question("Four Question", 4, "Four Question", "/resources/480x270.png",
-                    "Final Question", 5, "Final Question", 5, "Final Question", 5),
+                    "Final Question", 5, "Final Question", 5, "Final Question", 5,
+                    "/resources/FourthQuestion.wav"),
 
             new Question("Final Question", 5, "Final Question", "/resources/480x270.png",
-                    "The End", 0, "The End", 0, "The End", 0)
+                    "The End", 0, "The End", 0, "The End", 0,
+                    "/resources/GameScene.wav")
     };
 
     Question currentQuestion;
@@ -100,17 +106,21 @@ public class GamePlayController implements Initializable {
 
         currentQuestion = questions[0];
 
-        SetDisplayQuestion(currentQuestion);
+        try {
+            SetDisplayQuestion(currentQuestion);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
 
         Main.songPlayer.stop();
         try {
             Main.mainSong = new Media(getClass().getResource("/resources/GameScene.wav").toURI().toString());
+            Main.playingSong = "/resources/GameScene.wav";
             Main.songPlayer = new MediaPlayer(Main.mainSong);
             Main.songPlayer.setOnEndOfMedia(() -> Main.songPlayer.seek(Duration.ZERO));
             Main.songPlayer.setVolume(Main.volume);
             if (Main.isMusicPlaying) {
-                System.out.println("here");
                 Main.songPlayer.play();
             }
         } catch (URISyntaxException e) {
@@ -154,11 +164,28 @@ public class GamePlayController implements Initializable {
         int nextQuestionId = Integer.parseInt(button.getId());
         currentQuestion = questions[nextQuestionId];
 
-        SetDisplayQuestion(currentQuestion);
+        try {
+            SetDisplayQuestion(currentQuestion);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void SetDisplayQuestion(Question question) {
+    public void SetDisplayQuestion(Question question) throws URISyntaxException {
+
+        if(!question.music.equalsIgnoreCase(Main.playingSong)) {
+            Main.songPlayer.stop();
+            Main.mainSong = new Media(getClass().getResource(question.music).toURI().toString());
+            Main.playingSong = question.music;
+            Main.songPlayer = new MediaPlayer(Main.mainSong);
+            Main.songPlayer.setOnEndOfMedia(() -> Main.songPlayer.seek(Duration.ZERO));
+            Main.songPlayer.setVolume(Main.volume);
+            if (Main.isMusicPlaying) {
+                Main.songPlayer.play();
+            }
+        }
+
         questionTitle.setText(question.eventTitle);
         questionDesc.setText(question.eventDesc);
         image.setImage(new Image(question.imagePath));
